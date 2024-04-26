@@ -1,4 +1,5 @@
 import copy 
+import itertools
 import math
 
 
@@ -12,11 +13,7 @@ class TFIDFTest:
 		Returns:
 			unique set of words (set[str])
 		"""
-		words_set = set()
-		for doc in  corpus:
-			words = doc.split(" ")
-			words_set = words_set.union(set(words))
-		return words_set
+		return set(list(itertools.chain(*[doc.split(" ") for doc in corpus])))
 
 	def create_tf(self, words_set: set[str], corpus: list[str]) -> dict:
 		"""
@@ -89,4 +86,6 @@ if __name__ == "__main__":
 	print(f"this here is the inverse document frequency: {idf} \n")
 	print(f"this here is the tfidf:  {tf_idf} \n Thanks a lot!")
 	# Test to make sure that we are creating the right output.
-	assert(tf != tf_idf)
+	assert tf != tf_idf, "error - ft is same as ft_idf"
+	# Quick and dirty test - could enhance using pytest.
+	assert len(tf.keys()) == len(test_corpus), f"tf should be same length as corpus: {len(tf.keys())} == {len(test_corpus)}"
